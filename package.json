@@ -1,0 +1,38 @@
+{
+  "name": "r2drop",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "postinstall": "prisma generate",
+    "build": "next build",
+    "dev": "next dev --turbopack",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.922.0",
+    "@aws-sdk/s3-request-presigner": "^3.922.0",
+    "@prisma/client": "^6.18.0",
+    "axios": "^1.13.2",
+    "bcrypt": "^6.0.0",
+    "https-proxy-agent": "^7.0.6",
+    "next": "15.5.7",
+    "next-auth": "^4.24.11",
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4.1.16",
+    "@types/bcrypt": "^6.0.0",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "daisyui": "^5.4.3",
+    "eslint": "^9",
+    "eslint-config-next": "15.5.6",
+    "prisma": "^6.18.0",
+    "tailwindcss": "^4.1.16",
+    "typescript": "^5"
+  }
+}
