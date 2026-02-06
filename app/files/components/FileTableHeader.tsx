@@ -10,12 +10,12 @@ export function FileTableHeader({
   onSelectAll,
 }: FileTableHeaderProps) {
   return (
-    <thead className="bg-gray-50">
+    <thead className="bg-slate-50">
       <tr>
         <th scope="col" className="p-4">
           <input
             type="checkbox"
-            className="checkbox checkbox-xs rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+            className="checkbox checkbox-xs rounded border-slate-300 text-slate-900 focus:ring-[#d4af37]"
             onChange={onSelectAll}
             checked={isAllSelected}
             disabled={isBulkDeleting}
@@ -23,25 +23,25 @@ export function FileTableHeader({
         </th>
         <th
           scope="col"
-          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wide"
+          className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.18em] text-slate-500"
         >
           文件名
         </th>
         <th
           scope="col"
-          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wide"
+          className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.18em] text-slate-500"
         >
           大小
         </th>
         <th
           scope="col"
-          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wide"
+          className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.18em] text-slate-500"
         >
           最后修改
         </th>
         <th
           scope="col"
-          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wide"
+          className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.18em] text-slate-500"
         >
           操作
         </th>

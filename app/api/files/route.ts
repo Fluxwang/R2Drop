@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { ListObjectsV2Command } from "@aws-sdk/client-s3";
 import { s3Client, R2_BUCKET_NAME } from "@/lib/r2";
-import { authOptions } from "../auth/[...nextauth]/route";
+// import { authOptions } from "../auth/[...nextauth]/route";
+import { authOptions } from "@/lib/auth";
 
 export async function GET() {
   // 获取当前session
@@ -40,7 +41,7 @@ export async function GET() {
         count: files.length,
         userEmail: session.user.email,
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error: unknown) {
     console.error("获取文件列表失败:", error);
@@ -49,7 +50,7 @@ export async function GET() {
         error: "服务器内部错误",
         details: error instanceof Error ? error.message : String(error),
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

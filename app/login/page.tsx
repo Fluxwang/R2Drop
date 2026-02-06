@@ -46,69 +46,107 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
-          登录到你的账户
-        </h2>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label
-              className="block text-sm font-medium text-gray-700 mb-2"
-              htmlFor="email"
-            >
-              电子邮箱
-            </label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
-              placeholder="you@example.com"
-            />
-          </div>
-          <div className="mb-6">
-            <label
-              className="block text-sm font-medium text-gray-700 mb-2"
-              htmlFor="password"
-            >
-              密码
-            </label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
-              placeholder="••••••••"
-            />
-          </div>
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="cursor-pointer w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-gray-400 transition-colors"
-          >
-            {isLoading ? "登录中..." : "登录"}
-          </button>
-        </form>
+    <div className="relative min-h-screen overflow-hidden bg-[#f7f5f0] text-slate-900">
+      <div className="pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full bg-[#d4af37]/20 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-32 -left-32 h-96 w-96 rounded-full bg-slate-200/70 blur-3xl" />
 
-        {/* 显示错误消息 */}
-        {error && (
-          <p className="mt-4 text-center text-sm text-red-600">{error}</p>
-        )}
+      <div className="relative z-10 mx-auto flex w-full max-w-5xl items-center justify-center px-6 py-16">
+        <div className="grid w-full items-stretch gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="flex flex-col justify-center gap-6">
+            <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+              Secure Storage
+              <span className="h-1.5 w-1.5 rounded-full bg-[#d4af37]" />
+            </div>
+            <h1 className="text-3xl font-semibold leading-tight text-slate-900 sm:text-4xl">
+              让文件更安全地流转
+            </h1>
+            <p className="text-base leading-relaxed text-slate-600">
+              统一管理上传、下载与共享记录，专注于重要文件的可见性和可追溯性。
+            </p>
+            <div className="grid gap-3 text-sm text-slate-600">
+              <div className="flex items-center gap-3">
+                <span className="h-2 w-2 rounded-full bg-[#d4af37]" />
+                快速上传，实时进度追踪
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="h-2 w-2 rounded-full bg-[#d4af37]" />
+                统一文件列表与批量管理
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="h-2 w-2 rounded-full bg-[#d4af37]" />
+                全程加密与会话保护
+              </div>
+            </div>
+          </div>
 
-        <p className="mt-6 text-center text-sm text-gray-600">
-          还没有账户？{" "}
-          <Link
-            href="/register"
-            className="font-medium text-blue-600 hover:text-blue-500"
-          >
-            点此注册
-          </Link>
-        </p>
+          <div className="rounded-2xl border border-slate-200/80 bg-white/80 p-8 shadow-xl backdrop-blur">
+            <h2 className="text-2xl font-semibold text-slate-900">登录到你的账户</h2>
+            <p className="mt-2 text-sm text-slate-500">欢迎回来，请输入你的凭据继续。</p>
+
+            <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+              <div>
+                <label
+                  className="mb-2 block text-sm font-medium text-slate-700"
+                  htmlFor="email"
+                >
+                  电子邮箱
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-900 placeholder-slate-400 shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-[#d4af37]/40"
+                  placeholder="you@example.com"
+                />
+              </div>
+              <div>
+                <label
+                  className="mb-2 block text-sm font-medium text-slate-700"
+                  htmlFor="password"
+                >
+                  密码
+                </label>
+                <input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-900 placeholder-slate-400 shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-[#d4af37]/40"
+                  placeholder="••••••••"
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="cursor-pointer w-full rounded-xl bg-[#d4af37] px-4 py-3 text-sm font-semibold text-black shadow-md transition-colors duration-200 hover:bg-[#c7a533] focus:outline-none focus:ring-2 focus:ring-[#d4af37]/40 focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-slate-300"
+              >
+                {isLoading ? "登录中..." : "登录"}
+              </button>
+            </form>
+
+            {error && (
+              <p
+                className="mt-4 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-600"
+                role="alert"
+              >
+                {error}
+              </p>
+            )}
+
+            <p className="mt-6 text-center text-sm text-slate-600">
+              还没有账户？{" "}
+              <Link
+                href="/register"
+                className="font-semibold text-slate-900 underline decoration-[#d4af37] decoration-2 underline-offset-4 hover:text-slate-700"
+              >
+                点此注册
+              </Link>
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

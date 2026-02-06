@@ -168,7 +168,12 @@ export default function DashboardPage() {
 
   // 检查登录状态
   if (status === "loading") {
-    return <p>加载中...</p>;
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#f7f5f0] text-slate-600">
+        <span className="loading loading-spinner text-slate-400" />
+        <span className="ml-2 text-sm">加载中...</span>
+      </div>
+    );
   }
 
   // 如果未登录，重定向到登录页
@@ -178,168 +183,177 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-8">
-      <div className="w-full max-w-xl p-8 bg-white rounded-xl shadow-lg">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-800">
-            欢迎, {session?.user?.email}
-          </h1>
-          <button
-            onClick={() => signOut({ callbackUrl: "/" })}
-            className="cursor-pointer px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
-          >
-            退出登录
-          </button>
-        </div>
-
-        {/* --- 文件上传表单 (从组件合并回来) --- */}
-        <div className="mt-6 border-t border-gray-200 pt-6">
-          <h2 className="text-xl font-semibold text-gray-700 mb-4">
-            上传新文件
-          </h2>
-
-          <form
-            onSubmit={handleSubmit}
-            className="space-y-4"
-            onDragEnter={handleDrag}
-          >
-            <div
-              className={`relative flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer transition-colors duration-300 ${
-                dragActive
-                  ? "border-indigo-600 bg-indigo-50"
-                  : "border-gray-300 bg-gray-50 hover:bg-gray-100"
-              }`}
-              onDragEnter={handleDrag}
-              onDragLeave={handleDrag}
-              onDragOver={handleDrag}
-              onDrop={handleDrop}
-            >
-              <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                <svg
-                  className="w-10 h-10 mb-3 text-gray-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                  ></path>
-                </svg>
-                <p className="mb-2 text-sm text-gray-500">
-                  <span className="font-semibold">点击上传</span> 或拖拽文件到这里
-                </p>
-                <p className="text-xs text-gray-500">
-                  {pendingFiles.length > 0
-                    ? `待上传 ${pendingFiles.length} 个文件，当前选择: ${
-                        file?.name ?? "未选择"
-                      }`
-                    : "支持任意文件类型"}
-                </p>
-              </div>
-              <input
-                id="file-upload"
-                type="file"
-                multiple
-                onChange={handleFileChange}
-                disabled={isLoading}
-                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-              />
+    <div className="min-h-screen bg-[#f7f5f0] px-6 py-12">
+      <div className="mx-auto w-full max-w-5xl">
+        <div className="rounded-2xl border border-slate-200/80 bg-white/80 p-8 shadow-xl backdrop-blur">
+          <div className="flex flex-col gap-4 border-b border-slate-200/80 pb-6 md:flex-row md:items-center md:justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                Workspace
+              </p>
+              <h1 className="mt-2 text-2xl font-semibold text-slate-900">
+                欢迎, {session?.user?.email}
+              </h1>
+              <p className="mt-1 text-sm text-slate-500">
+                上传新文件并追踪进度，随时访问你的文件列表。
+              </p>
             </div>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => router.push("/files")}
+                className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition-colors hover:border-slate-300 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#d4af37]/40"
+              >
+                查看文件
+              </button>
+              <button
+                onClick={() => signOut({ callbackUrl: "/" })}
+                className="cursor-pointer rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-900/30"
+              >
+                退出登录
+              </button>
+            </div>
+          </div>
 
-            {pendingFiles.length > 0 && (
-              <div className="space-y-2">
-                <h3 className="text-sm font-semibold text-gray-700">
-                  待上传文件
-                </h3>
-                <ul className="space-y-2">
-                  {pendingFiles.map((pendingFile, index) => {
-                    const fileKey = getFileKey(pendingFile);
-                    const fileProgress = uploadProgressMap[fileKey];
-                    const showProgress =
-                      isLoading && fileProgress !== undefined;
-
-                    return (
-                      <li
-                        key={`${pendingFile.name}-${pendingFile.lastModified}-${index}`}
-                        className="rounded-lg border border-gray-200 bg-white px-3 py-2 shadow-sm"
-                      >
-                        <div className="flex items-center justify-between gap-3">
-                          <div className="min-w-0">
-                            <p className="truncate text-sm font-medium text-gray-800">
-                              {pendingFile.name}
-                            </p>
-                            <p className="text-xs text-gray-500">
-                              {(pendingFile.size / 1024).toFixed(1)} KB
-                            </p>
-                          </div>
-                          <button
-                            type="button"
-                            onClick={() => handleRemoveFile(index)}
-                            disabled={isLoading}
-                            className="cursor-pointer rounded-md border border-red-500 px-3 py-1 text-xs font-semibold text-red-600 transition-colors hover:bg-red-50 disabled:cursor-not-allowed disabled:border-gray-300 disabled:text-gray-400"
-                          >
-                            取消
-                          </button>
-                        </div>
-                        {showProgress && (
-                          <div className="mt-2">
-                            <div className="w-full rounded-full bg-gray-200">
-                              <div
-                                className="h-2 rounded-full bg-indigo-600 transition-all duration-300 ease-in-out"
-                                style={{ width: `${fileProgress}%` }}
-                              ></div>
-                            </div>
-                            <p className="mt-1 text-right text-xs text-gray-500">
-                              {fileProgress ?? 0}%
-                            </p>
-                          </div>
-                        )}
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            )}
-
-            <button
-              type="submit"
-              disabled={isLoading || pendingFiles.length === 0}
-              className=" cursor-pointer w-full px-4 py-3 font-semibold text-white bg-indigo-600 rounded-lg shadow-md
-                hover:bg-indigo-700
-                focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50
-                disabled:bg-gray-400 disabled:cursor-not-allowed"
-            >
-              {isLoading ? "上传中..." : "上传"}
-            </button>
-          </form>
-
-          {message && (
-            <p
-              className={`mt-4 text-sm font-medium ${
-                message.includes("失败") ? "text-red-600" : "text-green-600"
-              }`}
-            >
-              {message}
+          <div className="mt-8">
+            <h2 className="text-lg font-semibold text-slate-900">上传新文件</h2>
+            <p className="mt-1 text-sm text-slate-500">
+              支持拖拽或点击上传，批量文件会依次完成。
             </p>
-          )}
 
-          {/* 查看文件列表按钮 */}
-          <div className="mt-6 pt-4 border-t border-gray-200">
-            <button
-              className="cursor-pointer w-full px-4 py-3 font-semibold text-indigo-600 bg-white border-2 border-indigo-600 rounded-lg
-                hover:bg-indigo-50
-                focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50"
-              onClick={() => router.push("/files")}
+            <form
+              onSubmit={handleSubmit}
+              className="mt-6 space-y-5"
+              onDragEnter={handleDrag}
             >
-              查看我的文件
-            </button>
+              <div
+                className={`relative flex h-64 w-full flex-col items-center justify-center rounded-2xl border-2 border-dashed bg-white/70 transition-colors duration-300 ${
+                  dragActive
+                    ? "border-[#d4af37] bg-[#fff7e0]"
+                    : "border-slate-200 hover:border-slate-300"
+                }`}
+                onDragEnter={handleDrag}
+                onDragLeave={handleDrag}
+                onDragOver={handleDrag}
+                onDrop={handleDrop}
+              >
+                <div className="flex flex-col items-center justify-center gap-3 px-6 text-center">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 shadow-sm">
+                    <svg
+                      className="h-6 w-6"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-slate-700">
+                      点击上传或拖拽文件到这里
+                    </p>
+                    <p className="mt-1 text-xs text-slate-500">
+                      {pendingFiles.length > 0
+                        ? `待上传 ${pendingFiles.length} 个文件，当前选择: ${
+                            file?.name ?? "未选择"
+                          }`
+                        : "支持任意文件类型"}
+                    </p>
+                  </div>
+                </div>
+                <input
+                  id="file-upload"
+                  type="file"
+                  multiple
+                  onChange={handleFileChange}
+                  disabled={isLoading}
+                  className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                />
+              </div>
+
+              {pendingFiles.length > 0 && (
+                <div className="space-y-3">
+                  <h3 className="text-sm font-semibold text-slate-700">
+                    待上传文件
+                  </h3>
+                  <ul className="space-y-3">
+                    {pendingFiles.map((pendingFile, index) => {
+                      const fileKey = getFileKey(pendingFile);
+                      const fileProgress = uploadProgressMap[fileKey];
+                      const showProgress =
+                        isLoading && fileProgress !== undefined;
+
+                      return (
+                        <li
+                          key={`${pendingFile.name}-${pendingFile.lastModified}-${index}`}
+                          className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm"
+                        >
+                          <div className="flex items-center justify-between gap-3">
+                            <div className="min-w-0">
+                              <p className="truncate text-sm font-medium text-slate-800">
+                                {pendingFile.name}
+                              </p>
+                              <p className="text-xs text-slate-500">
+                                {(pendingFile.size / 1024).toFixed(1)} KB
+                              </p>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveFile(index)}
+                              disabled={isLoading}
+                              className="cursor-pointer rounded-lg border border-red-200 px-3 py-1 text-xs font-semibold text-red-600 transition-colors hover:border-red-300 hover:bg-red-50 disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-300"
+                            >
+                              取消
+                            </button>
+                          </div>
+                          {showProgress && (
+                            <div className="mt-3">
+                              <div className="h-2 w-full rounded-full bg-slate-200">
+                                <div
+                                  className="h-2 rounded-full bg-slate-900 transition-all duration-300 ease-in-out"
+                                  style={{ width: `${fileProgress}%` }}
+                                />
+                              </div>
+                              <p className="mt-1 text-right text-xs text-slate-500">
+                                {fileProgress ?? 0}%
+                              </p>
+                            </div>
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={isLoading || pendingFiles.length === 0}
+                className="cursor-pointer w-full rounded-xl bg-[#d4af37] px-4 py-3 text-sm font-semibold text-black shadow-md transition-colors duration-200 hover:bg-[#c7a533] focus:outline-none focus:ring-2 focus:ring-[#d4af37]/40 focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-slate-300"
+              >
+                {isLoading ? "上传中..." : "上传"}
+              </button>
+            </form>
+
+            {message && (
+              <p
+                className={`mt-4 rounded-lg border px-3 py-2 text-sm ${
+                  message.includes("失败")
+                    ? "border-red-200 bg-red-50 text-red-600"
+                    : "border-green-200 bg-green-50 text-green-600"
+                }`}
+                role="alert"
+              >
+                {message}
+              </p>
+            )}
           </div>
         </div>
-        {/* --- 文件上传表单结束 --- */}
       </div>
     </div>
   );

@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../auth/[...nextauth]/route";
+// import { authOptions } from "../auth/[...nextauth]/route";
+import { authOptions } from "@/lib/auth";
+
 import { s3Client, R2_BUCKET_NAME } from "@/lib/r2";
 import { DeleteObjectsCommand } from "@aws-sdk/client-s3";
 
@@ -23,7 +25,7 @@ export async function DELETE(request: Request) {
       if (!keys.startsWith(userPrefix)) {
         return NextResponse.json(
           { error: "禁止访问，权限不足" },
-          { status: 403 }
+          { status: 403 },
         );
       }
     }
@@ -41,13 +43,13 @@ export async function DELETE(request: Request) {
 
     return NextResponse.json({ message: "删除成功" }, { status: 200 });
   } catch (error: unknown) {
-    console.error("删除多选文件失败"), error;
+    (console.error("删除多选文件失败"), error);
     return NextResponse.json(
       {
         error: "删除多选文件失败",
         details: error instanceof Error ? error.message : String(error),
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

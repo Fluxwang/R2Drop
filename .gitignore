@@ -2,5 +2,9 @@ node_modules
 
 .next
 
+.opencode
+
+.env
+
 app/generated/prisma
 

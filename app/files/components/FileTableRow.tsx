@@ -31,12 +31,16 @@ export function FileTableRow({
   onDelete,
 }: FileTableRowProps) {
   return (
-    <tr className={isSelected ? "bg-indigo-50" : ""}>
+    <tr
+      className={`transition-colors ${
+        isSelected ? "bg-[#fff7e0]" : "hover:bg-slate-50"
+      }`}
+    >
       {/* 复选框列 */}
       <td className="p-4">
         <input
           type="checkbox"
-          className="checkbox checkbox-xs rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+          className="checkbox checkbox-xs rounded border-slate-300 text-slate-900 focus:ring-[#d4af37]"
           onChange={(e) => onSelectRow(e, file.key)}
           checked={isSelected}
           disabled={isBulkDeleting}
@@ -44,28 +48,28 @@ export function FileTableRow({
       </td>
 
       {/* 文件名列 */}
-      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+      <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-slate-900">
         {file.filename}
       </td>
 
       {/* 文件大小列 */}
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
         {formatBytes(file.size)}
       </td>
 
       {/* 最后修改时间列 */}
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
         {new Date(file.lastModified).toLocaleString()}
       </td>
 
       {/* 操作按钮列 */}
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-        <div className="flex items-center gap-4">
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
+        <div className="flex items-center gap-3">
           {/* 下载按钮 */}
           <button
             onClick={() => onDownload(file.key, file.filename)}
             disabled={isDownloading || isDeleting}
-            className="cursor-pointer text-indigo-600 hover:text-indigo-900 disabled:text-gray-400 disabled:cursor-wait"
+            className="cursor-pointer rounded-lg border border-slate-200 px-3 py-1 text-xs font-semibold text-slate-700 transition-colors hover:border-slate-300 hover:text-slate-900 disabled:cursor-wait disabled:border-slate-100 disabled:text-slate-300"
           >
             {isDownloading ? "下载中..." : "下载"}
           </button>
@@ -74,7 +78,7 @@ export function FileTableRow({
           <button
             onClick={() => onDelete(file.key)}
             disabled={isDeleting || isDownloading}
-            className="cursor-pointer text-red-500 hover:text-red-900 disabled:text-gray-400 disabled:cursor-wait"
+            className="cursor-pointer rounded-lg border border-red-200 px-3 py-1 text-xs font-semibold text-red-600 transition-colors hover:border-red-300 hover:text-red-700 disabled:cursor-wait disabled:border-slate-100 disabled:text-slate-300"
           >
             {isDeleting ? "删除中..." : "删除"}
           </button>
