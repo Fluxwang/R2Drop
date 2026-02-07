@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth"; // 用于获取用户会话
-import { authOptions } from "../auth/[...nextauth]/route";
+// import { authOptions } from "../auth/[...nextauth]/route";
+import { authOptions } from "@/lib/auth";
 import { PutObjectCommand } from "@aws-sdk/client-s3"; // 用于上传文件到S3
 import { s3Client, R2_BUCKET_NAME } from "@/lib/r2";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"; // 获取预签名URL
@@ -20,7 +21,7 @@ export async function POST(request: Request) {
     if (!filename || !contentType) {
       return NextResponse.json(
         { error: "无法获取文件名或文件类型" },
-        { status: 400 }
+        { status: 400 },
       );
     }
     // 生成一个唯一的S3存储键(key)
@@ -48,7 +49,7 @@ export async function POST(request: Request) {
         url: uploadUrl,
         key: uniqueKey,
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error("获取预签名URL失败", error);

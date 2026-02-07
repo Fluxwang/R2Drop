@@ -28,7 +28,7 @@ if (
 
 // 创建并配置 S3 客户端
 const s3Client = new S3Client({
-  region: "auto",
+  region: "cn-east-1",
   endpoint: R2_ENDPOINT,
   credentials: {
     accessKeyId: R2_ACCESS_KEY_ID,
