@@ -27,13 +27,20 @@ export async function GET() {
     const response = await s3Client.send(command);
 
     // 提取并格式化文件信息
-    const files = (response.Contents || []).map((item) => ({
-      key: item.Key,
-      filename: item.Key?.split("/").pop(),
-      size: item.Size,
-      lastModified: item.LastModified,
-      etag: item.ETag,
-    }));
+    const files = (response.Contents || [])
+      .map((item) => ({
+        key: item.Key,
+        filename: item.Key?.split("/").pop(),
+        size: item.Size,
+        lastModified: item.LastModified,
+        etag: item.ETag,
+      }))
+      .sort((a, b) => {
+        // 按上传时间降序排序（最新的在前）
+        const timeA = a.lastModified?.getTime() || 0;
+        const timeB = b.lastModified?.getTime() || 0;
+        return timeB - timeA;
+      });
 
     return NextResponse.json(
       {
