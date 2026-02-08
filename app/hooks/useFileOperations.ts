@@ -7,6 +7,7 @@ export function useFileOperations() {
 
   // 用于批量删除状态管理
   const [isBulkDeleting, setIsBulkDeleting] = useState(false);
+  const [isBulkDownloading, setIsBulkDownloading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   //处理文件下载
@@ -113,17 +114,65 @@ export function useFileOperations() {
     }
   };
 
+  // 处理批量下载
+  const handleBulkDownload = async (
+    selectedKeys: string[],
+    filenames: Record<string, string>
+  ) => {
+    if (selectedKeys.length === 0) {
+      setError("请先选择要下载的文件");
+      return;
+    }
+
+    setIsBulkDownloading(true);
+    setError(null);
+
+    try {
+      const response = await fetch("/api/bulkdownload", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ keys: selectedKeys }),
+      });
+
+      if (!response.ok) {
+        const errData = await response.json();
+        throw new Error(errData.error || "批量下载失败");
+      }
+
+      const { downloads } = await response.json();
+
+      // 依次触发下载
+      for (const { url, filename } of downloads) {
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        // 延迟避免浏览器阻止多个下载
+        await new Promise((resolve) => setTimeout(resolve, 300));
+      }
+    } catch (error: unknown) {
+      console.error("批量下载失败: ", error);
+      setError(error instanceof Error ? error.message : String(error));
+    } finally {
+      setIsBulkDownloading(false);
+    }
+  };
+
   // 组件可以通过解构来使用这些状态和函数
   return {
     // 状态
     downloadingKey,
     deletingKey,
     isBulkDeleting,
+    isBulkDownloading,
     error,
     // 函数
     handleDownload,
     handleDelete,
     handleBulkDelete,
+    handleBulkDownload,
     setError, // 也暴露 setError，以便组件清除错误
   };
 }

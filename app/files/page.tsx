@@ -23,10 +23,12 @@ export default function FilesPage() {
     downloadingKey,
     deletingKey,
     isBulkDeleting,
+    isBulkDownloading,
     error: opError, // Hook 的内部错误
     handleDownload,
     handleDelete,
     handleBulkDelete,
+    handleBulkDownload,
   } = useFileOperations();
 
   // 用于存储选中的Key 数组
@@ -139,28 +141,45 @@ export default function FilesPage() {
             </div>
             <div className="flex flex-wrap items-center gap-3">
               {selectedKeys.length > 0 && (
-                <button
-                  onClick={() =>
-                    handleBulkDelete(selectedKeys, () => {
-                      setFiles((prev) =>
-                        // prev = 当前的文件列表(删除之前的完整列表)
-                        prev.filter(
-                          (file) =>
-                            // 遍历每个文件，检查它是否在 selectedKeys 里
-                            !selectedKeys.includes(file.key)
-                          // 在的话就过滤掉，不在的话就保留
-                        )
-                      );
-                      setSelectedKeys([]);
-                    })
-                  }
-                  disabled={isBulkDeleting}
-                  className="cursor-pointer rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 disabled:cursor-not-allowed disabled:bg-red-300"
-                >
-                  {isBulkDeleting
-                    ? "删除中..."
-                    : `删除选中(${selectedKeys.length})`}
-                </button>
+                <>
+                  <button
+                    onClick={() => {
+                      const filenames = files.reduce((acc, file) => {
+                        if (file.key) acc[file.key] = file.filename || "";
+                        return acc;
+                      }, {} as Record<string, string>);
+                      handleBulkDownload(selectedKeys, filenames);
+                    }}
+                    disabled={isBulkDownloading}
+                    className="cursor-pointer rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:cursor-not-allowed disabled:bg-blue-300"
+                  >
+                    {isBulkDownloading
+                      ? "下载中..."
+                      : `下载选中(${selectedKeys.length})`}
+                  </button>
+                  <button
+                    onClick={() =>
+                      handleBulkDelete(selectedKeys, () => {
+                        setFiles((prev) =>
+                          // prev = 当前的文件列表(删除之前的完整列表)
+                          prev.filter(
+                            (file) =>
+                              // 遍历每个文件，检查它是否在 selectedKeys 里
+                              !selectedKeys.includes(file.key)
+                            // 在的话就过滤掉，不在的话就保留
+                          )
+                        );
+                        setSelectedKeys([]);
+                      })
+                    }
+                    disabled={isBulkDeleting}
+                    className="cursor-pointer rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 disabled:cursor-not-allowed disabled:bg-red-300"
+                  >
+                    {isBulkDeleting
+                      ? "删除中..."
+                      : `删除选中(${selectedKeys.length})`}
+                  </button>
+                </>
               )}
               <Link
                 href="/dashboard"
