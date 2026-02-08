@@ -37,7 +37,7 @@ export async function POST(request: Request) {
         });
         const url = await getSignedUrl(s3Client, command, { expiresIn: 900 });
         return { key, filename, url };
-      })
+      }),
     );
 
     return NextResponse.json({ downloads: downloadUrls }, { status: 200 });
@@ -48,7 +48,7 @@ export async function POST(request: Request) {
         error: "服务器内部错误",
         details: error instanceof Error ? error.message : String(error),
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
