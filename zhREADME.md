@@ -4,6 +4,10 @@
 
 支持邮箱注册登录、拖拽/批量上传、文件列表管理、单个/批量下载与删除，并通过服务端鉴权确保用户只能访问自己的文件。
 
+## 项目来源
+
+本项目基于 [LearningR2Drop](https://github.com/Fluxwang/LearningR2Drop) 进行开发，并在此基础上做了 AI 驱动的 UI 优化。
+
 English version: [README.md](./README.md)
 
 ## 功能特性

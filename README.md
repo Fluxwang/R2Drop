@@ -4,6 +4,10 @@ A private file management app built with Next.js App Router + NextAuth + Prisma 
 
 It supports email-based registration/login, drag-and-drop and batch upload, file list management, single/batch download, and single/batch deletion, with server-side authorization checks to ensure each user can only access their own files.
 
+## Project Origin
+
+This project is based on [LearningR2Drop](https://github.com/Fluxwang/LearningR2Drop) and includes AI-driven UI optimization improvements.
+
 Chinese version: [zhREADME.md](./zhREADME.md)
 
 ## Features
